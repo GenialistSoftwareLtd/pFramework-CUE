@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pFramework-M3U" default="jar">
+	
+	<target name="init">
+		<buildnumber/>
+		
+		<tstamp>
+			<format property="TODAY_UK" pattern="dd-MMMM-yyyy" locale="en"/>
+			<format property="TIME_UK" pattern="HH:mm"/>
+		</tstamp>
+	
+		<!-- RELEASE DATE -->
+		<tstamp>
+		    <format property="DATE_UK" pattern="dd/MM/yyyy"/>
+		</tstamp>
+		<replace preserveLastModified="yes" dir="bin/tv/genialist/fwrk" token="date-uk" value="${DATE_UK}">
+			<include name="**/*Plugin.properties"/>
+		</replace>
+		<!-- RELEASE VERSION -->
+		<property file="../../../pFramework-Media/src/main/version.properties"/>
+			<replace preserveLastModified="yes" dir="bin/tv/genialist/fwrk" token="version-uk" value="${VERSION}">
+			<include name="**/*Plugin.properties"/>
+		</replace>
+	
+		<property name="package.version" value="${VERSION}"/>
+		<echo>Version = ${VERSION} (${DATE_UK})...</echo>
+	</target>
+		
+	<target name="jar" depends="init">
+		<property name="jar.file" value="c:/cvsdir/JAVA/pFramework/java/plugins/pfwrk-cue.jar"/>
+		
+		<delete file="${jar.file}"/>
+		<jar destfile="${jar.file}">
+			<fileset dir="bin"
+				includes="**/*.class,**/*.jpg,**/*.gif,**/*.png,**/*.xml,**/*.xsd,**/*.wsdl,**/*.xsl,**/*.html,**/*.properties"
+				excludes="**/package.html,**/package-info.class,**/pVersionAntTask.class"/>
+
+			<manifest>
+				<attribute name="Specification-Title" value="tv.genialist.fwrk.plugin.pM3UPlugin"/>
+				<attribute name="Specification-Version" value="${package.version}"/>
+				<attribute name="Specification-Vendor" value="Genialist Software Ltd"/>
+				<attribute name="Implementation-Title" value="CUE"/>
+				<attribute name="Implementation-Version" value="${package.version}, Build: ${build.number}, ${TODAY_UK} ${TIME_UK}"/>
+				<attribute name="Implementation-Vendor" value="Genialist Software Ltd"/>
+				
+				<section name="pFramework">
+					<attribute name="plugins" value="tv.genialist.fwrk.plugin.pCUEPlugin"/>
+				</section>
+			</manifest>
+		</jar>
+	</target>
+</project>
