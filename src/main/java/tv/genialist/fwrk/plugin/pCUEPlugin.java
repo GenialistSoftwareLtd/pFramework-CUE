@@ -19,8 +19,9 @@ import tv.genialist.fwrk.media.cue.pCUESheet;
 import tv.genialist.fwrk.media.cue.pCUETrack;
 import tv.genialist.fwrk.swing.util.service.pFileAcceptMetadata;
 import tv.genialist.fwrk.swing.util.service.pFileAcceptMetadata.pFileAcceptMetadata_Request;
+import tv.genialist.fwrk.swing.util.service.pFileToPlaylist.pFileToPlaylist_Request;
 import tv.genialist.fwrk.swing.util.service.pFileSetMetadata;
-import tv.genialist.fwrk.swing.util.service.pFileToPlaylist.pServiceProvider;
+import tv.genialist.fwrk.swing.util.service.pFileToPlaylist;
 import tv.genialist.ptools.lang.util.pStringUtil;
 import tv.genialist.ptools.util.pDuration;
 import tv.genialist.ptools.util.pFilenameUtil;
@@ -56,13 +57,15 @@ public class pCUEPlugin extends pBasePlugin {
 	private pCUEPlugin() {
 		super();
 		
-		addResource(new pServiceProvider() {
+		addResource(new pFileToPlaylist.pAbstractChangeFileMetadata_ServiceProvider(this.getConfigHandler(), "cur.sp.file.to.playlist", true) {
+			
+			@Override
+			public boolean invoke(final pFileToPlaylist_Request p_request) {
 
-			/**************************************************************************/
-			/***  DEFINITIONS  ********************************************************/
-			/**************************************************************************/
-
-			public boolean provide(File i_file, List<pMediaDocument> i_result, String p_default_title, long p_default_duration) {
+				final File i_file = p_request.getSourceFile();
+				final List<pMediaDocument> i_result = p_request.getResult();
+				final String p_default_title = p_request.getDefaultTitle();
+				final long p_default_duration = p_request.getDefaultDuration();
 				
 				final String i_name = i_file.getName();
 				//0.9.20
